@@ -1,6 +1,10 @@
+// config is to access variables
 require("dotenv").config()
 
 const express = require("express");
+
+
+console.log(process.env.API_KEY)
 
 const bodyParser= require("body-parser");
 
@@ -30,8 +34,8 @@ password: String
 
 
  // added mongoose ecrypt as a plgin to schema and pass secret as a javascript object
-                                                  // only encrypt password
- userSchema.plugin(encrypt, {secret:secret, encryptedFields: ["password"]});
+                                   // grab secret from env file               // only encrypt password
+ userSchema.plugin(encrypt, {secret:process.env.SECRET, encryptedFields: ["password"]});
 
  const User = new mongoose.model("User", userSchema)
 
