@@ -28,7 +28,8 @@ password: String
 
  const secret =  "Thisisoursecret.";
  // added mongoose ecrypt as a plgin to schema and pass secret as a javascript object
- userSchema.plugin(encrypt, {secret:secret});
+                                                  // only encrypt password
+ userSchema.plugin(encrypt, {secret:secret, encryptedFields: ["password"]});
 
  const User = new mongoose.model("User", userSchema)
 
