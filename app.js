@@ -50,6 +50,26 @@ app.get ("/register", function(req,res){
     res.render("register")
 })
 
+// make post request to register route
+app.post("/register", function(req,res){
+// document to create user
+    const newUser = new User({
+
+        email: req.body.username,
+        password: req.body.password
+    });
+
+    newUser.save( function(){
+if(err){
+    console.log(err);
+} else{
+    // render secrets page
+    res.render("secrets")
+}
+
+    })
+
+})
 
 
 
