@@ -59,17 +59,43 @@ app.post("/register", function(req,res){
         password: req.body.password
     });
 
-    newUser.save( function(){
+    newUser.save( function(err){
 if(err){
     console.log(err);
 } else{
-    // render secrets page
+    // render secrets page once user is logged in
     res.render("secrets")
 }
 
     })
 
 })
+// check if user is already in the database
+app.post("/login", function(req,res){
+
+    const username=  req.body.username;
+
+    const password = req.body.password;
+
+// does email have the same data as username
+    User.findOne({email: username}, function(err,foundUser){
+if(err){
+    console.log(err);
+} else {
+    if(foundUser){
+        // if found user password = the one in database
+        if(foundUser.password=== password) {
+res.render("secrets")
+
+        }
+    }
+}
+
+    });
+
+
+
+});
 
 
 
