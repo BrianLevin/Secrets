@@ -19,12 +19,16 @@ const app = express();
 
 
  mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true});
-
- const userSchema =  {
+                   // created from mongoose.schema class to encrypt data
+ const userSchema =  new mongoose.Schema ({
 email: String,
 password: String
 
- };
+ });
+
+ const secret =  "Thisisoursecret.";
+ // added mongoose ecrypt as a plgin to schema and pass secret as a javascript object
+ userSchema.plugin(encrypt, {secret:secret});
 
  const User = new mongoose.model("User", userSchema)
 
