@@ -1,3 +1,5 @@
+require("dotenv").config()
+
 const express = require("express");
 
 const bodyParser= require("body-parser");
@@ -26,7 +28,7 @@ password: String
 
  });
 
- const secret =  "Thisisoursecret.";
+
  // added mongoose ecrypt as a plgin to schema and pass secret as a javascript object
                                                   // only encrypt password
  userSchema.plugin(encrypt, {secret:secret, encryptedFields: ["password"]});
