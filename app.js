@@ -70,7 +70,8 @@ app.post("/register", function(req,res){
     const newUser = new User({
 
         email: req.body.username,
-        password: req.body.password
+        // hash function to turn that into irreversible hash
+        password: md5(req.body.password)
     });
 
     newUser.save( function(err){
@@ -88,8 +89,8 @@ if(err){
 app.post("/login", function(req,res){
 
     const username=  req.body.username;
-
-    const password = req.body.password;
+                 // hash function
+    const password = md5(req.body.password);
 
 // does email have the same data as username
     User.findOne({email: username}, function(err,foundUser){
