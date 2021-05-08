@@ -12,7 +12,8 @@ const ejs= require("ejs");
 
 const mongoose = require("mongoose");
 
-const encrypt = require("mongoose-encryption");
+const md5 = require("md5");
+
 
 const app = express();
 
@@ -35,7 +36,7 @@ password: String
 
  // added mongoose ecrypt as a plgin to schema and pass secret as a javascript object
                                    // grab secret from env file               // only encrypt password
- userSchema.plugin(encrypt, {secret:process.env.SECRET, encryptedFields: ["password"]});
+
 
  const User = new mongoose.model("User", userSchema)
 
