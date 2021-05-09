@@ -100,7 +100,7 @@ app.post("/login", function(req,res){
 
     const username=  req.body.username;
                  // hash function
-    const password = md5(req.body.password);
+    const password = (req.body.password);
 
 // does email have the same data as username
     User.findOne({email: username}, function(err,foundUser){
@@ -109,18 +109,23 @@ if(err){
 } else {
     if(foundUser){
         // if found user password = the one in database
-        if(foundUser.password=== password) {
-res.render("secrets")
+        // bcrypt hash generated password matches users login
+        bcrypt.compare(password, foundUser.password, function(err, result) {
+            if(result === true){
+                res.render("secrets")
+            }
+        });
+
 
         }
     }
-}
-
-    });
-
-
+});
 
 });
+
+
+
+
 
 
 
