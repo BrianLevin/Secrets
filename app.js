@@ -12,7 +12,10 @@ const ejs= require("ejs");
 
 const mongoose = require("mongoose");
 
-const md5 = require("md5");
+const bcrypt = require("bcrypt");
+
+// random hashes
+const saltRounds= 10;
 
 
 const app = express();
@@ -66,23 +69,30 @@ app.get ("/register", function(req,res){
 
 // make post request to register route
 app.post("/register", function(req,res){
+    // create user once generated hash
+    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+        // Store hash in your password DB.
 // document to create user
-    const newUser = new User({
+const newUser = new User({
 
-        email: req.body.username,
-        // hash function to turn that into irreversible hash
-        password: md5(req.body.password)
-    });
+    email: req.body.username,
+    // hash function to turn that into irreversible hash
+    password: hash
+});
 
-    newUser.save( function(err){
+newUser.save( function(err){
 if(err){
-    console.log(err);
+console.log(err);
 } else{
-    // render secrets page once user is logged in
-    res.render("secrets")
+// render secrets page once user is logged in
+res.render("secrets")
 }
 
-    })
+})
+
+    });
+
+
 
 })
 // check if user is already in the database
