@@ -59,8 +59,14 @@ password: String
 
 
  const User = new mongoose.model("User", userSchema)
+// use passportlocal mongoose to use the schema
 
-
+// authentiicat users and username and passwords
+ passport.use(User.createStrategy());
+// serialize creates cookie
+ passport.serializeUser(User.serializeUser());
+ // passport destroys the cookie to get info inside cookie to authentticate user
+ passport.deserializeUser(User.deserializeUser());
 
 
 
