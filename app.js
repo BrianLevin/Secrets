@@ -38,8 +38,10 @@ saveUninitialized: false
 
 
 }));
-
+// intiaize pass port to start using for authentification
 app.use(passport,initialize());
+// use passport to also set up session
+app.use(passport.session());
 
  mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true});
                    // created from mongoose.schema class to encrypt data
