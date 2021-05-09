@@ -94,7 +94,7 @@ app.get ("/register", function(req,res){
 
 })
 
-app.get("/secrets", function(req.res){
+app.get("/secrets", function(req,res){
     // check to see if user is authenticated 
 
     if(req.isAuthenticated()){
@@ -131,8 +131,35 @@ User.register({username:req.body.username}, req.body.password, function(err,user
 })
 // check if user is already in the database
 app.post("/login", function(req,res){
+// created new user
+   const user = new User ({
+username: req.body.username,
+password: req.body.password
 
-   
+
+
+
+   })
+
+   // login user and authenticate them
+
+   req.login(user, function(err){
+       if(err){
+console.log(err);
+
+       } else{
+
+        // redirect to secrets route once authenticated
+passport.authenticate("local", req,res, function(){
+
+    res.redirect("/secrets");
+
+});
+
+
+       }
+
+   });
 
 
 });
