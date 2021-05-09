@@ -106,6 +106,12 @@ app.get("/secrets", function(req,res){
     }
 })
 
+app.get("/logout", function(req,res){
+req.logout();
+res.redirect("/");
+
+})
+
 // make post request to register route
 app.post("/register", function(req,res){
     
@@ -136,10 +142,7 @@ app.post("/login", function(req,res){
 username: req.body.username,
 password: req.body.password
 
-
-
-
-   })
+   });
 
    // login user and authenticate them
 
@@ -150,7 +153,7 @@ console.log(err);
        } else{
 
         // redirect to secrets route once authenticated
-passport.authenticate("local", req,res, function(){
+passport.authenticate("local") (req,res, function(){
 
     res.redirect("/secrets");
 
