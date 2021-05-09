@@ -38,6 +38,7 @@ saveUninitialized: false
 
 
 }));
+///// 14 min mark in video
 // intiaize pass port to start using for authentification
 app.use(passport.initialize());
 // use passport to also set up  and manage the session
@@ -89,8 +90,23 @@ app.get ("/login", function(req,res){
 
 app.get ("/register", function(req,res){
 
+// register comes from passport local mongoose package
+    User.register({username:req.body.username}, req.body.password, function(err,user){
+if(err) {
+    console.log(err);
+    // redirect to try again
+res.redirect("/register")
+// type of authentification is local
+// succesfully registered and autheticated user, managed to set up cookie to see if they are logged in  that saved current logged in session and routed to secrets page
+} else{
+passport.authenticate("local")(req,res, function(){
+// can automatically view secrets page even if they still are logged in
+    res.redirect("/secrets")
+} )
 
-    res.render("register")
+}
+
+    })
 })
 
 // make post request to register route
