@@ -30,7 +30,16 @@ const app = express();
 
  app.use(bodyParser.urlencoded({extended: true}));
 
+ // uss and utilze  express session
+app.use(session({
+secret: "Our little secret",
+resave: false,
+saveUninitialized: false
 
+
+}));
+
+app.use(passport,initialize());
 
  mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true});
                    // created from mongoose.schema class to encrypt data
