@@ -39,12 +39,15 @@ saveUninitialized: false
 
 }));
 // intiaize pass port to start using for authentification
-app.use(passport,initialize());
+app.use(passport.initialize());
 // use passport to also set up  and manage the session
 app.use(passport.session());
-
- mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true});
+                                                         // got rid of depreciated warnings for future versions
+ mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true, useUnifiedTopology: true});
                    // created from mongoose.schema class to encrypt data
+                   // got rid of depreciation warning
+                   mongoose.set("useCreateIndex",true )
+
  const userSchema =  new mongoose.Schema ({
 email: String,
 password: String
@@ -63,7 +66,7 @@ password: String
 
 // authentiicat users and username and passwords
  passport.use(User.createStrategy());
-// serialize creates cookie
+// serialize creates cookie and stores identification
  passport.serializeUser(User.serializeUser());
  // passport destroys the cookie to get info inside cookie to authentticate user
  passport.deserializeUser(User.deserializeUser());
