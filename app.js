@@ -90,29 +90,42 @@ app.get ("/login", function(req,res){
 
 app.get ("/register", function(req,res){
 
-// register comes from passport local mongoose package
-    User.register({username:req.body.username}, req.body.password, function(err,user){
-if(err) {
-    console.log(err);
-    // redirect to try again
-res.redirect("/register")
-// type of authentification is local
-// succesfully registered and autheticated user, managed to set up cookie to see if they are logged in  that saved current logged in session and routed to secrets page
-} else{
-passport.authenticate("local")(req,res, function(){
-// can automatically view secrets page even if they still are logged in
-    res.redirect("/secrets")
-} )
+    res.render("register");
 
-}
+})
 
-    })
+app.get("/secrets", function(req.res){
+    // check to see if user is authenticated 
+
+    if(req.isAuthenticated()){
+// get rendered to secrets route if authenticated
+        res.render("secrets");
+    } else{
+// get redirected to login route if not authenticated
+       res.redirect("/login")
+    }
 })
 
 // make post request to register route
 app.post("/register", function(req,res){
     
-
+// register comes from passport local mongoose package
+User.register({username:req.body.username}, req.body.password, function(err,user){
+    if(err) {
+        console.log(err);
+        // redirect to try again
+    res.redirect("/register")
+    // type of authentification is local
+    // succesfully registered and autheticated user, managed to set up cookie to see if they are logged in  that saved current logged in session and routed to secrets page
+    } else{
+    passport.authenticate("local")(req,res, function(){
+    // can automatically view secrets page even if they still are logged in
+        res.redirect("/secrets")
+    } )
+    
+    }
+    
+        })
 
 
 })
