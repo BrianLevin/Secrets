@@ -12,7 +12,6 @@ const ejs= require("ejs");
 
 const mongoose = require("mongoose");
 
-const bcrypt = require("bcrypt");
 
 // random hashes
 const saltRounds= 10;
@@ -69,28 +68,7 @@ app.get ("/register", function(req,res){
 
 // make post request to register route
 app.post("/register", function(req,res){
-    // create user once generated hash
-    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
-        // Store hash in your password DB.
-// document to create user
-const newUser = new User({
-
-    email: req.body.username,
-    // hash function to turn that into irreversible hash
-    password: hash
-});
-
-newUser.save( function(err){
-if(err){
-console.log(err);
-} else{
-// render secrets page once user is logged in
-res.render("secrets")
-}
-
-})
-
-    });
+    
 
 
 
@@ -98,28 +76,8 @@ res.render("secrets")
 // check if user is already in the database
 app.post("/login", function(req,res){
 
-    const username=  req.body.username;
-                 // hash function
-    const password = (req.body.password);
+   
 
-// does email have the same data as username
-    User.findOne({email: username}, function(err,foundUser){
-if(err){
-    console.log(err);
-} else {
-    if(foundUser){
-        // if found user password = the one in database
-        // bcrypt hash generated password matches users login
-        bcrypt.compare(password, foundUser.password, function(err, result) {
-            if(result === true){
-                res.render("secrets")
-            }
-        });
-
-
-        }
-    }
-});
 
 });
 
