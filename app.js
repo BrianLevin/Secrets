@@ -40,7 +40,7 @@ saveUninitialized: false
 }));
 // intiaize pass port to start using for authentification
 app.use(passport,initialize());
-// use passport to also set up session
+// use passport to also set up  and manage the session
 app.use(passport.session());
 
  mongoose.connect("mongodb://localhost:27017/userDB", {useNewUrlParser: true});
@@ -50,6 +50,8 @@ email: String,
 password: String
 
  });
+// use to hash and salt passwards and save users  in mongo db database
+ userSchema.plugin(passportLocalMongoose);
 
 
  // added mongoose ecrypt as a plgin to schema and pass secret as a javascript object
