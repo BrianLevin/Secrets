@@ -52,7 +52,8 @@ app.use(passport.session());
 
  const userSchema =  new mongoose.Schema ({
 email: String,
-password: String
+password: String,
+googleId: String
 
  });
 // use to hash and salt passwards and save users  in mongo db database
@@ -70,6 +71,7 @@ password: String
 
 // authentiicat users and username and passwords
  passport.use(User.createStrategy());
+// serialize creates cookie and stores identification
 // serialize creates cookie and stores identification
 passport.serializeUser(function(user, done) {
     done(null, user.id);
