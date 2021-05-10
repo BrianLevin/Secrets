@@ -53,7 +53,8 @@ app.use(passport.session());
  const userSchema =  new mongoose.Schema ({
 email: String,
 password: String,
-googleId: String
+googleId: String,
+secret: String
 
  });
 // use to hash and salt passwards and save users  in mongo db database
@@ -160,6 +161,30 @@ app.get("/submit", function(req,res){
     
            res.redirect("/login")
         }
+
+})
+
+app.post ("/submit", function(req,res){
+    // "secret" will be grabed from the name in the submit.ejs file
+const submittedSecret = req.body.secret;
+
+console.log(req.user.id);
+// find the user who posted the secret
+User.findById(req.user.id, function(err,foundUser){
+if(err) {
+    console.log(err)
+} else {
+    // this will post and save the secret on the mongo db
+    if (foundUser) {
+        foundUser.secret = submittedSecret;
+        foundUser.save(function(){
+            res.redirect("/secrets");
+        });
+    }
+}
+
+})
+
 
 })
 
