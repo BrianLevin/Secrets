@@ -149,6 +149,20 @@ app.get("/secrets", function(req,res){
     }
 })
 
+// route to submit secrets page
+app.get("/submit", function(req,res){
+   
+
+   if(req.isAuthenticated()){
+  
+            res.render("submit");
+        } else{
+    
+           res.redirect("/login")
+        }
+
+})
+
 app.get("/logout", function(req,res){
 req.logout();
 res.redirect("/");
