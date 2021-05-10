@@ -3,9 +3,6 @@ require("dotenv").config()
 
 const express = require("express");
 
-
-console.log(process.env.API_KEY)
-
 const bodyParser= require("body-parser");
 
 const ejs= require("ejs");
@@ -74,9 +71,15 @@ password: String
 // authentiicat users and username and passwords
  passport.use(User.createStrategy());
 // serialize creates cookie and stores identification
- passport.serializeUser(User.serializeUser());
- // passport destroys the cookie to get info inside cookie to authentticate user
- passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+      done(err, user);
+    });
+  });
 
 // utilize google authentification and strategy to login user
 passport.use(new GoogleStrategy({
@@ -88,12 +91,14 @@ passport.use(new GoogleStrategy({
   },
   // acess token gets data related to user  profile contains email, google id  and anything else we want access to
   function(accessToken, refreshToken, profile, cb) {
+      console.log(profile);
       // find a user id with that id in our database or create them if they dont exist
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
       return cb(err, user);
     });
   }
 ));
+
 
 
 app.get ("/", function(req,res){
@@ -105,6 +110,14 @@ app.get ("/", function(req,res){
 app.get("/auth/google",
     // use passport to authenticate user using google strategy then get users profile
 passport.authenticate("google", { scope: ["profile"] }));
+
+// once google auth is sucessful, this will route them to the secrets page
+app.get("/auth/google/secrets", 
+  passport.authenticate('google', { failureRedirect: "/login" }),
+  function(req, res) {
+    // Successful authentication, redirect secrets.
+    res.redirect("/secrets");
+  });
 
 
 
