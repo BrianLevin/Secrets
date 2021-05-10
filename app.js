@@ -49,7 +49,7 @@ app.use(passport.session());
                    // created from mongoose.schema class to encrypt data
                    // got rid of depreciation warning
                    mongoose.set("useCreateIndex",true )
-
+// mongoose schema which will hold all the db values
  const userSchema =  new mongoose.Schema ({
 email: String,
 password: String,
@@ -139,15 +139,19 @@ app.get ("/register", function(req,res){
 })
 
 app.get("/secrets", function(req,res){
-    // check to see if user is authenticated 
+    // find where all secrets are to be displayed on page
+    // pick secrets where user is not equal to null
+    User.find({"secrets": {$ne:null}}, function(err,foundUsers){
+        if (err){
+            console.log(err);
+        } else {
+            if (foundUsers) {
+                res.render("secrets", {usersWithSecrets: foundUsers})
+            }
+        }
+    })
 
-    if(req.isAuthenticated()){
-// get rendered to secrets route if authenticated
-        res.render("secrets");
-    } else{
-// get redirected to login route if not authenticated
-       res.redirect("/login")
-    }
+
 })
 
 // route to submit secrets page
