@@ -15,6 +15,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose= require("passport-local-mongoose")
+const findOrCreate = require('mongoose-findorcreate');
 
 // otha access
 
@@ -60,6 +61,8 @@ password: String
 // use to hash and salt passwards and save users  in mongo db database
  userSchema.plugin(passportLocalMongoose);
 
+ userSchema.plugin(findOrCreate);
+
 
  // added mongoose ecrypt as a plgin to schema and pass secret as a javascript object
                                    // grab secret from env file               // only encrypt password
@@ -75,7 +78,7 @@ password: String
  // passport destroys the cookie to get info inside cookie to authentticate user
  passport.deserializeUser(User.deserializeUser());
 
-// utilize google authentification
+// utilize google authentification and strategy to login user
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
@@ -83,7 +86,9 @@ passport.use(new GoogleStrategy({
     // retieving info from their user info and not google + due to depreciation
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
+  // acess token gets data related to user  profile contains email, google id  and anything else we want access to
   function(accessToken, refreshToken, profile, cb) {
+      // find a user id with that id in our database or create them if they dont exist
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
       return cb(err, user);
     });
