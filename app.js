@@ -8,10 +8,13 @@ const bodyParser= require("body-parser");
 const ejs= require("ejs");
 
 const mongoose = require("mongoose");
-
+// assigns client id  info assioated with client is stored on id
 const session = require("express-session");
+// authentication middleware for node js
 const passport = require("passport");
+// simpliesfiies  bulidng user name and password with mongoose and automatically hash salt and hash feilds
 const passportLocalMongoose= require("passport-local-mongoose")
+// find a user or create auser someone already created  the id
 const findOrCreate = require('mongoose-findorcreate');
 
 // otha access
@@ -63,8 +66,7 @@ secret: String
  userSchema.plugin(findOrCreate);
 
 
- // added mongoose ecrypt as a plgin to schema and pass secret as a javascript object
-                                   // grab secret from env file               // only encrypt password
+
 
 
  const User = new mongoose.model("User", userSchema)
@@ -77,7 +79,7 @@ secret: String
 passport.serializeUser(function(user, done) {
     done(null, user.id);
   });
-
+// deconstructing the data
   passport.deserializeUser(function(id, done) {
     User.findById(id, function(err, user) {
       done(err, user);
