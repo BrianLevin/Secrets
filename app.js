@@ -141,7 +141,7 @@ app.get ("/register", function(req,res){
 app.get("/secrets", function(req,res){
     // find where all secrets are to be displayed on page
     // pick secrets where user is not equal to null
-    User.find({"secrets": {$ne:null}}, function(err,foundUsers){
+    User.find({"secret": {$ne:null}}, function(err,foundUsers){
         if (err){
             console.log(err);
         } else {
