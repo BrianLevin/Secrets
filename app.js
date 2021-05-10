@@ -102,6 +102,12 @@ app.get ("/", function(req,res){
     res.render("home")
 })
 
+app.get("/auth/google",
+    // use passport to authenticate user using google strategy then get users profile
+passport.authenticate("google", { scope: ["profile"] }));
+
+
+
 
 app.get ("/login", function(req,res){
 
