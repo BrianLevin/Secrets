@@ -16,6 +16,9 @@ const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose= require("passport-local-mongoose")
 
+// otha access
+
+var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 
 // random hashes
